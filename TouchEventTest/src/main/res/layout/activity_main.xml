@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.myapplication.MainActivity">
+
+    <com.example.myapplication.CustomeViewGroup
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:background="@android:color/darker_gray"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="400dp">
+        <com.example.myapplication.CustomView
+            android:layout_width="100dp"
+            android:background="@android:color/holo_blue_bright"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="match_parent"/>
+    </com.example.myapplication.CustomeViewGroup>
+
+</android.support.constraint.ConstraintLayout>
