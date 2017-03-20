@@ -66,7 +66,7 @@ public class CustomeViewGroup extends RelativeLayout {
                 //如果上下的速度大于左右的速度，则说明是上下滑动，需要拦截该事件
                 if (mStatus == STATUS_RESET && Math.abs(y) > Math.abs(x)) {
                     mStatus = STATUS_INTERCEPT;
-                    return true;
+                    return true;    //拦截事件
                 } else if (x != 0 && y != 0){
                     mStatus = STATUS_UNINTERCEPT;
                 }
