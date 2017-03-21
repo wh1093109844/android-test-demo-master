@@ -1,4 +1,10 @@
-package com.example.myapplication;
+package com.example.myapplication.module;
+
+import com.example.myapplication.AOpreate;
+import com.example.myapplication.BOpreate;
+import com.example.myapplication.IOpreate;
+import com.example.myapplication.qualifier.a;
+import com.example.myapplication.qualifier.b;
 
 import javax.inject.Named;
 

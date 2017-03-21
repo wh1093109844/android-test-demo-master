@@ -1,4 +1,7 @@
-package com.example.myapplication;
+package com.example.myapplication.component;
+
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.module.OpreateModule;
 
 import dagger.Component;
 

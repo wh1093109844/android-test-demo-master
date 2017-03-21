@@ -1,4 +1,10 @@
-package com.example.myapplication;
+package com.example.myapplication.module;
+
+import com.example.myapplication.AUser;
+import com.example.myapplication.BUser;
+import com.example.myapplication.IUser;
+import com.example.myapplication.qualifier.a;
+import com.example.myapplication.qualifier.b;
 
 import javax.inject.Named;
 

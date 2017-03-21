@@ -2,6 +2,9 @@ package com.example.myapplication;
 
 import android.util.Log;
 
+import com.example.myapplication.component.OpreateComponent;
+import com.example.myapplication.qualifier.b;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 

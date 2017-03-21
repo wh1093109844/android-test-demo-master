@@ -1,4 +1,8 @@
-package com.example.myapplication;
+package com.example.myapplication.component;
+
+import com.example.myapplication.AUser;
+import com.example.myapplication.BUser;
+import com.example.myapplication.module.OpreateModule;
 
 import dagger.Component;
 

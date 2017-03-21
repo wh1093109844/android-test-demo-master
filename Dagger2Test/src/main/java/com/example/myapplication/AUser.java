@@ -2,6 +2,8 @@ package com.example.myapplication;
 
 import android.util.Log;
 
+import com.example.myapplication.qualifier.a;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
