@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <dimen name="default_height">200dp</dimen>
+</resources>
