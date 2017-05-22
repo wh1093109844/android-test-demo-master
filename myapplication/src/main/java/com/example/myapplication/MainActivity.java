@@ -1,21 +1,20 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.design.widget.TabLayout.OnTabSelectedListener;
+import android.support.design.widget.TabLayout.Tab;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 
-import com.example.myapplication.ImageTypeListAdapter.OnItemClickListener;
 import com.example.myapplication.bean.Galleryclass;
 import com.example.myapplication.retrofit.RetrofitInterface.GetImageTypeList;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
@@ -27,10 +26,10 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private RecyclerView mRecyclerView;
     private ViewPager mViewPager;
-    private ImageTypeListAdapter mImageTypeListAdapter;
     private ViewPagerAdapter mViewPagerAdapter;
+    private TabLayout mTabLayout;
+    private SimpleDraweeView cover;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,35 +41,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.image_type_list);
+        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        cover = (SimpleDraweeView) findViewById(R.id.conver);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, OrientationHelper.HORIZONTAL, false));
-        mImageTypeListAdapter = new ImageTypeListAdapter(null);
-        mRecyclerView.setAdapter(mImageTypeListAdapter);
-        mImageTypeListAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                mViewPager.setCurrentItem(position);
-            }
-        });
 
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), null);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                mImageTypeListAdapter.setCurrentIndex(position);
-                mRecyclerView.scrollToPosition(position);
             }
 
             @Override
             public void onPageSelected(int position) {
-
+                Log.i(TAG, "onPageSelected:" + position);
+                mTabLayout.getTabAt(position).select();
+                cover.setImageURI("http://www.tngou.net/tnfs/image/ext/161016/3f2ab53c286b8a5c3949616bafc805ca.jpg");
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
 
+            }
+        });
+
+        mTabLayout.addOnTabSelectedListener(new OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(Tab tab) {
+                Log.i(TAG, "onTabSelected:" + tab.getPosition());
+                mViewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(Tab tab) {
+                Log.i(TAG, "onTabUnselected:" + tab.getPosition());
+            }
+
+            @Override
+            public void onTabReselected(Tab tab) {
+                Log.i(TAG, "onTabReselected:" + tab.getPosition());
             }
         });
     }
@@ -85,14 +94,17 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<Galleryclass>> call, Response<List<Galleryclass>> response) {
                 List<Galleryclass> list = response.body();
                 if (list != null) {
-                    for (Galleryclass type : list) {
+                    for (int i = 0; i < list.size(); i++) {
+                        Galleryclass type = list.get(i);
                         StringBuilder builder = new StringBuilder();
                         builder.append("id:").append(type.id).append("\tname:").append(type.name).append("\ttitle:").append(type.title).append("\tkeywords:").append(type.keywords).append("\tdesc:").append(type.description).append("\tseq:").append(type.seq);
                         Log.i(TAG, builder.toString());
-
+                        Tab tab = mTabLayout.newTab();
+                        tab.setText(type.title);
+                        tab.setTag(type);
+                        mTabLayout.addTab(tab);
                     }
                 }
-                mImageTypeListAdapter.update(list);
                 mViewPagerAdapter.update(list);
             }
 
