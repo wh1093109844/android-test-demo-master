@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">GankIO</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="type_all">all</string>
+    <string name="type_android">Andorid</string>
+    <string name="type_ios">iOS</string>
+    <string name="type_video">休息视频</string>
+    <string name="type_welfare">福利</string>
+    <string name="type_extar">扩展资源</string>
+    <string name="type_front_end">前端</string>
+    <string name="type_recommend">瞎推荐</string>
+    <string name="type_app">App</string>
+
+    <string-array name="type_array">
+        <item>@string/type_all</item>
+        <item>@string/type_android</item>
+        <item>@string/type_ios</item>
+        <item>@string/type_video</item>
+        <item>@string/type_welfare</item>
+        <item>@string/type_extar</item>
+        <item>@string/type_front_end</item>
+        <item>@string/type_recommend</item>
+        <item>@string/type_app</item>
+    </string-array>
+</resources>
