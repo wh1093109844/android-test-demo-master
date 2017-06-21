@@ -13,6 +13,7 @@
         android:layout_height="wrap_content">
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/imageView"
+            android:transitionName="image"
             android:layout_width="match_parent"
             android:layout_height="200dp" />
         <TextView

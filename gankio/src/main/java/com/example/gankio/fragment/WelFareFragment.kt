@@ -1,7 +1,9 @@
-package com.example.gankio
+package com.example.gankio.fragment
 
+import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -11,7 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import com.bumptech.glide.Glide.init
+import com.example.gankio.Const
+import com.example.gankio.R
+import com.example.gankio.activity.ImageDetailActivity
 import com.example.gankio.model.ImageSize
 import com.example.gankio.model.Welfare
 import com.example.gankio.model.WelfareResult
@@ -21,10 +25,11 @@ import com.facebook.drawee.controller.BaseControllerListener
 import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.image.ImageInfo
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_welfare.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlinx.android.synthetic.main.fragment_welfare.view.*
+import kotlinx.android.synthetic.main.item_welfare.view.*
 
 /**
  * Created by za-wanghe on 2017/6/16.
@@ -66,7 +71,7 @@ class WelFareFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val array = layoutManager.findLastVisibleItemPositions(null)
-                if (array[layoutManager.spanCount - 1] + Const.PRE_LOAD_SIZE >= adapter.itemCount && !(view?.swipeRefreshLayout?.isRefreshing ?: true)) {
+                if (array[layoutManager.spanCount - 1] + Const.PRE_LOAD_SIZE >= adapter.itemCount && !(view.swipeRefreshLayout?.isRefreshing ?: true)) {
                     currPage += 1
                     loadImageList()
                 }
@@ -78,6 +83,11 @@ class WelFareFragment : Fragment() {
             loadImageList()
         }
         loadImageList()
+        adapter.onItemClick ({holder, position ->
+            var intent = Intent(activity, ImageDetailActivity::class.java)
+            intent.putExtra("url", holder.welfare?.url)
+            activity.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(activity, holder.imageView, "image").toBundle())
+        })
     }
 
     fun loadImageList() {
@@ -105,22 +115,24 @@ class WelFareFragment : Fragment() {
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var imageView: SimpleDraweeView
-        var textView: TextView
+        var imageView: SimpleDraweeView = itemView.imageView
+        var textView: TextView = itemView.textView
         var welfare: Welfare? = null
 
         init {
-            imageView = itemView.findViewById<SimpleDraweeView>(R.id.imageView) as SimpleDraweeView
-            textView = itemView.findViewById<TextView>(R.id.textView)  as TextView
             itemView.setOnClickListener { view -> welfare?.let {
-                Toast.makeText(view.context, "${welfare?._id}", Toast.LENGTH_SHORT).show()
+                onItemClick?.onItemClick(this, itemView.tag as Int)
+//                Toast.makeText(view.context, "${welfare?._id}", Toast.LENGTH_SHORT).show()
             } }
         }
+
+        var onItemClick: OnItemClick? = null
     }
 
     class RecyclerViewAdapter() : RecyclerView.Adapter<ViewHolder>() {
         private var imageList: MutableList<Welfare> = mutableListOf()
         private var sizeMap = mutableMapOf<Int, ImageSize>()
+        private var onItemClick: OnItemClick? = null
         override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
             var welFare = imageList[position]
             var controller = Fresco.newDraweeControllerBuilder()?.setOldController(holder?.imageView?.controller)?.setUri(welFare.url)?.setTapToRetryEnabled(true)?.setControllerListener(object : BaseControllerListener<ImageInfo>() {
@@ -144,6 +156,8 @@ class WelFareFragment : Fragment() {
             holder?.imageView?.controller = controller
             holder?.textView?.text = "${welFare.desc}"
             holder?.welfare = welFare
+            holder?.onItemClick = onItemClick
+            holder?.itemView?.tag = position
         }
 
         override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
@@ -183,8 +197,22 @@ class WelFareFragment : Fragment() {
 
         fun reset() {
             imageList.clear()
-//            sizeMap.clear()
+        }
+
+        fun onItemClick(onItemClick: OnItemClick) {
+            this.onItemClick = onItemClick
+        }
+
+        fun onItemClick(block:(ViewHolder, Int) -> Unit) {
+            this.onItemClick = object : OnItemClick {
+                override fun onItemClick(holder: ViewHolder, postion: Int) {
+                    block(holder, postion)
+                }
+            }
         }
     }
 
+    interface OnItemClick {
+        fun onItemClick(holder: ViewHolder, postion: Int)
+    }
 }

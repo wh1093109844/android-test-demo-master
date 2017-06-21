@@ -1,5 +1,6 @@
-package com.example.gankio
+package com.example.gankio.activity
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -8,13 +9,20 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.WindowManager
+import com.example.gankio.R
+import com.example.gankio.fragment.WelFareFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
@@ -27,6 +35,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
+//        toolbarLayout.title = resources.getString(R.string.app_name)
+//        toolbarLayout.setExpandedTitleColor(Color.WHITE)
+//        toolbarLayout.setCollapsedTitleTextColor(Color.WHITE)
         nav_view.setNavigationItemSelectedListener(this)
         supportFragmentManager.beginTransaction().add(R.id.contentLayout, WelFareFragment()).commit()
     }

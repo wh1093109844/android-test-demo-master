@@ -26,6 +26,9 @@ object Const {
 
     const val PRE_LOAD_SIZE = 5
 
+    const val DISK_CACHE_MAX_SIZE: Long = 50 * 1024 * 1024
+    const val DISK_CACHE_DIR_NAME = "gankio"
+
     val retrofit by lazy {
         Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build()
     }
